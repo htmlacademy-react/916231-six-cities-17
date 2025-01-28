@@ -1,33 +1,35 @@
-export type CardProps = {
-    id: string;
-    title: string;
-    type: string;
-    price: number;
-    city: {
-      name: string;
-    };
-    isFavorite: boolean;
-    isPremium: boolean;
-    rating: number;
-    previewImage: string;
+import {Link} from 'react-router-dom';
+import {OfferType} from '../../types/offer';
+
+type CardProps = {
+  offer: OfferType;
+  cardType: string;
+  onHandleActiveOfferChange: (id: string | null) => void;
 }
 
-function Card({offer}: {offer: CardProps}): JSX.Element {
+function Card({offer, cardType, onHandleActiveOfferChange}: CardProps): JSX.Element {
   return (
-    <article className="cities__card place-card">
-      <div className="place-card__mark">
-        <span>Premium</span>
-      </div>
-      <div className="cities__image-wrapper place-card__image-wrapper">
-        <a href="#">
+    <article
+      className={`${cardType}__card place-card`}
+      onMouseEnter={() => onHandleActiveOfferChange(offer.id)}
+      onMouseLeave={() => onHandleActiveOfferChange(null)}
+    >
+      {offer.isPremium &&
+        (
+          <div className="place-card__mark">
+            <span>Premium</span>
+          </div>
+        )}
+      <div className={`${cardType}__image-wrapper place-card__image-wrapper`}>
+        <Link to={`/offer/${offer.id}`}>
           <img
             className="place-card__image"
             src={offer.previewImage}
-            width={260}
-            height={200}
+            width={cardType === 'cities' ? 260 : 150}
+            height={cardType === 'cities' ? 200 : 110}
             alt="Place image"
           />
-        </a>
+        </Link>
       </div>
       <div className="place-card__info">
         <div className="place-card__price-wrapper">
@@ -56,9 +58,9 @@ function Card({offer}: {offer: CardProps}): JSX.Element {
           </div>
         </div>
         <h2 className="place-card__name">
-          <a href="#">
+          <Link to={`/offer/${offer.id}`}>
             {offer.title}
-          </a>
+          </Link>
         </h2>
         <p className="place-card__type">{offer.type}</p>
       </div>
