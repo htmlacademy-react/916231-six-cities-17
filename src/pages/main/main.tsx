@@ -1,12 +1,20 @@
 import Header from '../../components/header/header';
 import LocationList from '../../components/locations-list/locations-list';
-import Card, {CardProps} from '../../components/card/card';
+import CardList from '../../components/card-list/card-list';
+import {OfferType} from '../../types/offer';
+import {useState} from 'react';
 
 type MainProps = {
-  offers: CardProps[];
+  offers: OfferType[];
 }
 
 function Main({offers}: MainProps): JSX.Element {
+  const [isActiveOffer, setActiveOffer] = useState<string | null>(null);
+
+  const handleActiveOfferChange = (id: string | null) => {
+    setActiveOffer(id);
+  };
+
   return (
     <div className="page page--gray page--main">
       <Header />
@@ -45,11 +53,7 @@ function Main({offers}: MainProps): JSX.Element {
                   </li>
                 </ul>
               </form>
-              <div className="cities__places-list places__list tabs__content">
-                {offers.map((offer) => (
-                  <Card key={offer.id} offer={offer}/>
-                ))}
-              </div>
+              <CardList offers={offers} onHandleActiveOfferChange={handleActiveOfferChange}/>
             </section>
             <div className="cities__right-section">
               <section className="cities__map map" />
